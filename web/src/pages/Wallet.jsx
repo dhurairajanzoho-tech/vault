@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useMobile } from '../hooks/useMobile';
 import { useExpenses } from '../../../shared/hooks/useExpenses.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { getMonthKey, getLastSixMonths, getMonthLabel } from '../../../shared/utils/dateUtils.js';
@@ -9,11 +10,9 @@ import { WORK_SALARY_AMOUNT } from '../../../shared/constants/categories.js';
 
 // ── API ────────────────────────────────────────────────────────────────────────
 
-const API_BASE = (() => {
-  if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
-    return import.meta.env.VITE_API_URL;
-  return 'http://localhost:3001';
-})();
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
+  ? import.meta.env.VITE_API_URL
+  : '';
 
 const apiFetch = (path) =>
   fetch(`${API_BASE}${path}`).then(r => {
@@ -139,6 +138,7 @@ const TransferModal = ({ onClose, onConfirm, shProfit, c }) => {
 export const Wallet = () => {
   const { theme } = useTheme();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   const months        = getLastSixMonths();
   const [selectedMonth, setSelectedMonth] = useState(getMonthKey());
@@ -251,7 +251,7 @@ export const Wallet = () => {
               💳 Main Wallet Balance
             </div>
             <div style={{
-              fontSize: 46, fontWeight: 900, color: balanceColor,
+              fontSize: isMobile ? 34 : 46, fontWeight: 900, color: balanceColor,
               letterSpacing: '-0.03em', lineHeight: 1,
             }}>
               {formatCurrency(walletBalance)}
@@ -286,7 +286,7 @@ export const Wallet = () => {
           {/* Breakdown mini cards */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: transferredTotal > 0 ? 'repeat(3, 1fr)' : '1fr 1fr',
+            gridTemplateColumns: isMobile ? '1fr 1fr' : (transferredTotal > 0 ? 'repeat(3, 1fr)' : '1fr 1fr'),
             gap: 10,
           }}>
             <div style={{

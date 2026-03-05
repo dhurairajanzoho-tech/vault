@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useMobile } from '../hooks/useMobile';
 import { useExpenses } from '../../../shared/hooks/useExpenses.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { formatDate, getMonthKey, getLastSixMonths } from '../../../shared/utils/dateUtils.js';
@@ -44,6 +45,7 @@ export const Expenses = () => {
   const { theme } = useTheme();
   const { defaultPaymentMethod } = useApp();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   const months = getLastSixMonths();
   const [selectedMonth, setSelectedMonth] = useState(getMonthKey());
@@ -146,15 +148,15 @@ export const Expenses = () => {
     <div className="fade-in" style={{ maxWidth: 900 }}>
 
       {/* ── Header ── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 22 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 22, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text }}>Expenses</h1>
+          <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: c.text }}>Expenses</h1>
           <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>
             {selectedLabel}
             {' · '}<span style={{ color: '#F44336', fontWeight: 700 }}>{formatCurrency(totalSpent)} spent</span>
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button onClick={refresh} style={{ ...inputStyle, cursor: 'pointer', padding: '9px 12px' }} title="Refresh">🔄</button>
 
           {/* Hidden file input for OCR */}
@@ -168,7 +170,7 @@ export const Expenses = () => {
             onClick={triggerOcrPicker} disabled={ocrLoading}
             style={{
               ...inputStyle, cursor: ocrLoading ? 'not-allowed' : 'pointer',
-              padding: '9px 14px', border: `1px solid ${c.accent}55`,
+              padding: '9px 12px', border: `1px solid ${c.accent}55`,
               color: ocrLoading ? c.subtext : c.accent,
               display: 'flex', alignItems: 'center', gap: 6,
               opacity: ocrLoading ? 0.7 : 1, transition: 'all 150ms ease',
@@ -176,34 +178,23 @@ export const Expenses = () => {
             title="Scan receipt with OCR"
           >
             {ocrLoading ? (
-              <>
-                <span style={{
-                  width: 14, height: 14, border: `2px solid ${c.accent}44`,
-                  borderTopColor: c.accent, borderRadius: '50%',
-                  display: 'inline-block', animation: 'spin 0.7s linear infinite',
-                }} />
-                Scanning…
-              </>
+              <span style={{ width: 14, height: 14, border: `2px solid ${c.accent}44`, borderTopColor: c.accent, borderRadius: '50%', display: 'inline-block', animation: 'spin 0.7s linear infinite' }} />
             ) : (
-              <>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="3"/>
-                  <path d="M7 2v4M17 2v4M7 18v4M17 18v4M2 7h4M18 7h4M2 17h4M18 17h4"/>
-                  <rect x="8" y="8" width="8" height="8" rx="1"/>
-                </svg>
-                Scan Receipt
-              </>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 2v4M17 2v4M7 18v4M17 18v4M2 7h4M18 7h4M2 17h4M18 17h4"/><rect x="8" y="8" width="8" height="8" rx="1"/>
+              </svg>
             )}
+            {!isMobile && (ocrLoading ? 'Scanning…' : 'Scan')}
           </button>
 
           <button
             onClick={() => { setOcrPrefill(null); setShowAddModal(true); }}
             style={{
               background: c.accent, color: '#000', border: 'none', borderRadius: 10,
-              padding: '10px 18px', cursor: 'pointer', fontWeight: 700, fontSize: 13,
-              fontFamily: 'Inter, sans-serif',
+              padding: '10px 16px', cursor: 'pointer', fontWeight: 700, fontSize: 13,
+              fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap',
             }}
-          >+ Add Expense</button>
+          >+ Add</button>
         </div>
       </div>
 
@@ -234,22 +225,24 @@ export const Expenses = () => {
       )}
 
       {/* ── Filters ── */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 10, marginBottom: 16 }}>
         <input
-          style={{ ...inputStyle, flex: 1, minWidth: 180 }}
+          style={{ ...inputStyle, flex: 1 }}
           placeholder="🔍 Search expenses..."
           value={search} onChange={e => setSearch(e.target.value)}
         />
-        <select style={{ ...inputStyle, cursor: 'pointer' }} value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
-          <option value="">All Categories</option>
-          {DEFAULT_CATEGORIES.map(cat => (
-            <option key={cat.id} value={cat.id}>{cat.icon} {cat.label}</option>
-          ))}
-        </select>
-        <select style={{ ...inputStyle, cursor: 'pointer' }} value={filterPayment} onChange={e => setFilterPayment(e.target.value)}>
-          <option value="">All Payments</option>
-          {PAYMENT_METHODS.map(m => <option key={m} value={m}>{m}</option>)}
-        </select>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <select style={{ ...inputStyle, cursor: 'pointer', flex: 1 }} value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
+            <option value="">All Categories</option>
+            {DEFAULT_CATEGORIES.map(cat => (
+              <option key={cat.id} value={cat.id}>{cat.icon} {cat.label}</option>
+            ))}
+          </select>
+          <select style={{ ...inputStyle, cursor: 'pointer', flex: 1 }} value={filterPayment} onChange={e => setFilterPayment(e.target.value)}>
+            <option value="">All Payments</option>
+            {PAYMENT_METHODS.map(m => <option key={m} value={m}>{m}</option>)}
+          </select>
+        </div>
       </div>
 
       {/* ── Summary strip ── */}

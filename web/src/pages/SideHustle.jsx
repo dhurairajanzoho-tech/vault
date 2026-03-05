@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useMobile } from '../hooks/useMobile';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { Card, CardHeader } from '../components/common/Card';
 import { SkeletonList, CardSkeleton } from '../components/common/Skeleton';
@@ -124,11 +125,9 @@ const StatCard = ({ label, value, sub, color, icon }) => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Derive the base URL for the API (same pattern as notionClient.js)
-const API_BASE = (() => {
-  if (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
-    return import.meta.env.VITE_API_URL;
-  return 'http://localhost:3001';
-})();
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
+  ? import.meta.env.VITE_API_URL
+  : '';
 
 const apiFetch = (path) =>
   fetch(`${API_BASE}${path}`).then(r => {
@@ -140,6 +139,7 @@ const apiFetch = (path) =>
 export const SideHustle = () => {
   const { theme } = useTheme();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   // ── state ──────────────────────────────────────────────────────────────────
   const [months, setMonths]     = useState([]);
@@ -407,7 +407,7 @@ export const SideHustle = () => {
 
       {/* ── LOADING ── */}
       {loading && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4, 1fr)', gap: 14, marginBottom: 20 }}>
           {[1, 2, 3, 4].map(i => <CardSkeleton key={i} />)}
         </div>
       )}
@@ -416,7 +416,7 @@ export const SideHustle = () => {
       {!loading && data && view === 'overview' && (
         <>
           {/* Summary stats */}
-          <div style={{ display: 'flex', gap: 14, marginBottom: 20, flexWrap: 'wrap' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: 14, marginBottom: 20 }}>
             <StatCard label="Revenue"      value={formatCurrency(summary.totalRevenue)}     sub={`${summary.totalWorks} works`}   color={c.accent}  icon="💰" />
             <StatCard label="Designer Pay" value={formatCurrency(summary.totalDesignerPay)} sub="Paid out"                         color="#F44336"   icon="💸" />
             <StatCard label="Your Profit"  value={formatCurrency(summary.totalProfit)}      sub={`${profitMargin}% margin`}        color="#4CAF50"   icon="📈" />
@@ -443,7 +443,7 @@ export const SideHustle = () => {
               </div>
             </Card>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px', gap: 16, marginBottom: 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 220px', gap: 16, marginBottom: 20 }}>
               {/* Client breakdown */}
               <Card>
                 <CardHeader title="By Client" icon="👥" subtitle="Click a client to filter works" />
@@ -667,9 +667,13 @@ export const SideHustle = () => {
             </div>
           )}
 
+          {/* Works table — horizontally scrollable on mobile */}
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+
           {/* Column headers */}
           <div style={{
             display: 'grid', gridTemplateColumns: '3fr 1.2fr 1fr 1fr 1fr 1.2fr',
+            minWidth: 560,
             gap: 8, padding: '7px 12px',
             borderBottom: `1px solid ${c.border}`,
             fontSize: 10.5, fontWeight: 700, color: c.subtext,
@@ -693,7 +697,7 @@ export const SideHustle = () => {
               const clr = w.client ? colorFor(w.client) : c.subtext;
               return (
                 <div key={w.id} style={{
-                  display: 'grid', gridTemplateColumns: '3fr 1.2fr 1fr 1fr 1fr 1.2fr',
+                  display: 'grid', gridTemplateColumns: '3fr 1.2fr 1fr 1fr 1fr 1.2fr', minWidth: 560,
                   gap: 8, padding: '11px 12px', alignItems: 'center',
                   borderBottom: i < filteredWorks.length - 1 ? `1px solid ${c.border}` : 'none',
                   transition: 'background 100ms ease',
@@ -740,7 +744,7 @@ export const SideHustle = () => {
           {/* Footer totals */}
           {filteredWorks.length > 0 && (
             <div style={{
-              display: 'grid', gridTemplateColumns: '3fr 1.2fr 1fr 1fr 1fr 1.2fr',
+              display: 'grid', gridTemplateColumns: '3fr 1.2fr 1fr 1fr 1fr 1.2fr', minWidth: 560,
               gap: 8, padding: '11px 12px',
               borderTop: `2px solid ${c.border}`,
               background: c.surfaceElevated,
@@ -762,6 +766,7 @@ export const SideHustle = () => {
               <div />
             </div>
           )}
+          </div> {/* end scroll wrapper */}
         </Card>
       )}
 

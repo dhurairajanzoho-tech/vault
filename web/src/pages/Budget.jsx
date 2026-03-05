@@ -84,7 +84,7 @@ export const Budget = () => {
           background: c.surfaceElevated, border: `1px solid ${c.cardBorder}`,
           borderRadius: 16, padding: '18px 20px', marginBottom: 24,
         }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: c.text }}>Monthly Budget Overview</div>
             <div style={{ display: 'flex', gap: 10 }}>
               {exceededCount > 0 && (
@@ -122,8 +122,8 @@ export const Budget = () => {
           </div>
 
           {/* Numbers row */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: 24 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <div>
                 <div style={{ fontSize: 10, color: c.subtext, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 3 }}>Spent</div>
                 <div style={{ fontSize: 16, fontWeight: 800, color: '#F44336' }}>{formatCurrency(totalSpent)}</div>

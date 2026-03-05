@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useMobile } from '../hooks/useMobile';
 import { useIncome } from '../../../shared/hooks/useIncome.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { formatDate, todayISO, getLastSixMonths, getMonthKey } from '../../../shared/utils/dateUtils.js';
@@ -87,6 +88,7 @@ const IncomeRow = ({ entry, isLast, c }) => {
 export const Income = () => {
   const { theme } = useTheme();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   const months = getLastSixMonths();
   const [selectedMonth, setSelectedMonth] = useState(getMonthKey());
@@ -140,7 +142,7 @@ export const Income = () => {
     <div className="fade-in" style={{ maxWidth: 800 }}>
 
       {/* ── Header ── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 22 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 22, flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text }}>Income</h1>
           <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>
@@ -169,7 +171,7 @@ export const Income = () => {
       </div>
 
       {/* ── Summary Stats ── */}
-      <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 12, marginBottom: 20 }}>
         <MiniStat label="Work Salary" value={formatCurrency(workSalary.amount)} icon="🏢" color={c.accent} c={c} />
         <MiniStat label="Side Hustle" value={formatCurrency(sideHustleTotal)} icon="💼" color="#7B2FBE" c={c} />
         <MiniStat label="Total Income" value={formatCurrency(totalIncome)} icon="💵" color="#4CAF50" c={c} />

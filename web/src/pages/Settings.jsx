@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
+import { useMobile } from '../hooks/useMobile';
 import { useAuth } from '../context/AuthContext';
 import { THEMES, ACCENT_PRESETS, buildThemeFromAccent } from '../../../shared/constants/themes.js';
 import { DEFAULT_CATEGORIES, PAYMENT_METHODS } from '../../../shared/constants/categories.js';
@@ -286,7 +287,7 @@ const AppearanceSection = ({ c }) => {
       {/* ── Preset Themes ── */}
       <div>
         <div className="label" style={{ marginBottom: 10 }}>Preset Themes</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 8 }}>
           {Object.values(THEMES).map(t => {
             const isActive = themeId === t.id;
             return (
@@ -589,6 +590,7 @@ export const Settings = () => {
   const { defaultPaymentMethod, saveDefaultPayment } = useApp();
   const { logout, hasPin } = useAuth();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   const [notionKey, setNotionKey] = useState('');
   const [testing, setTesting] = useState(false);
