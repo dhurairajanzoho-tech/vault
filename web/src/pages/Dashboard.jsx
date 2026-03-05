@@ -219,7 +219,7 @@ export const Dashboard = () => {
       <AlertBanner alerts={alerts} />
 
       {/* Stat Cards — 3 columns with delta badges */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
+      <div className="stat-grid">
         <StatCard
           title="Total Income"
           icon="💵"
@@ -253,7 +253,7 @@ export const Dashboard = () => {
       </div>
 
       {/* Bottom Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div className="two-col-grid">
         {/* Donut Chart */}
         <Card>
           <CardHeader title="Spending by Category" icon="🍩" />
@@ -305,8 +305,9 @@ export const Dashboard = () => {
       {/* FAB */}
       <button
         onClick={() => setShowAddModal(true)}
+        className="fab-btn"
         style={{
-          position: 'fixed', bottom: 32, right: 32,
+          position: 'fixed', bottom: 32, right: 32, zIndex: 100,
           width: 56, height: 56,
           background: `linear-gradient(135deg, ${c.accent}, ${c.accent}cc)`,
           border: 'none', borderRadius: '50%',

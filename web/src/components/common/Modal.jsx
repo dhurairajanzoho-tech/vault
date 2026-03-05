@@ -15,6 +15,7 @@ export const Modal = ({ isOpen, onClose, title, children, width = 520 }) => {
 
   return (
     <div
+      className="modal-overlay"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
       style={{
         position: 'fixed', inset: 0,
@@ -26,6 +27,7 @@ export const Modal = ({ isOpen, onClose, title, children, width = 520 }) => {
       }}
     >
       <div
+        className="modal-box"
         onClick={(e) => e.stopPropagation()}
         style={{
           background: c.surface,

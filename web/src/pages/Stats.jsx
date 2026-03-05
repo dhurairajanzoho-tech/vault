@@ -211,7 +211,7 @@ export const Stats = () => {
       ) : (
         <>
           {/* ── Summary Cards + Savings Ring ── */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 14, marginBottom: 24, alignItems: 'stretch' }}>
+          <div className="stats-summary-grid">
             {[
               { label: 'Total Income', value: stats.totalIncome, color: c.accent, icon: '💵' },
               { label: 'Total Expenses', value: stats.totalExpenses, color: '#F44336', icon: '💳' },
@@ -249,7 +249,7 @@ export const Stats = () => {
               <div style={{ fontSize: 13, fontWeight: 700, color: c.text, marginBottom: 16 }}>
                 🏆 Top Spending Categories
               </div>
-              <div style={{ display: 'flex', gap: 12 }}>
+              <div className="top3-grid">
                 {stats.top3.map((item, i) => {
                   const cat = DEFAULT_CATEGORIES.find(c => c.id === item.category);
                   const medals = ['🥇', '🥈', '🥉'];
