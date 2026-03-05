@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+web/node_modules/
+server/node_modules/
+mobile/node_modules/
+
+# Environment files (NEVER commit these)
+.env
+server/.env
+*.env.local
+
+# Vault config (contains secrets)
+server/.vault-config.json
+
+# Build output
+web/dist/
+web/.vite/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+
+# Expo / Mobile
+mobile/.expo/
+mobile/android/
+mobile/ios/

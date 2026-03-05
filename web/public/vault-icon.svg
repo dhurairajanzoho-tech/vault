@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#0d0d0d"/>
+
+  <!-- Outer ring -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="#F59E0B" stroke-width="8" opacity="0.3"/>
+
+  <!-- Vault door body -->
+  <circle cx="256" cy="256" r="170" fill="#1a1a1a" stroke="#F59E0B" stroke-width="6"/>
+
+  <!-- Vault handle ring -->
+  <circle cx="256" cy="256" r="110" fill="none" stroke="#F59E0B" stroke-width="10" opacity="0.8"/>
+
+  <!-- Cross spokes -->
+  <line x1="256" y1="146" x2="256" y2="366" stroke="#F59E0B" stroke-width="8" opacity="0.6"/>
+  <line x1="146" y1="256" x2="366" y2="256" stroke="#F59E0B" stroke-width="8" opacity="0.6"/>
+
+  <!-- Diagonal spokes -->
+  <line x1="178" y1="178" x2="334" y2="334" stroke="#F59E0B" stroke-width="6" opacity="0.35"/>
+  <line x1="334" y1="178" x2="178" y2="334" stroke="#F59E0B" stroke-width="6" opacity="0.35"/>
+
+  <!-- Center hub -->
+  <circle cx="256" cy="256" r="32" fill="#F59E0B"/>
+  <circle cx="256" cy="256" r="18" fill="#0d0d0d"/>
+
+  <!-- Bolt indicators (4 corners of vault door) -->
+  <circle cx="256" cy="146" r="10" fill="#F59E0B" opacity="0.9"/>
+  <circle cx="256" cy="366" r="10" fill="#F59E0B" opacity="0.9"/>
+  <circle cx="146" cy="256" r="10" fill="#F59E0B" opacity="0.9"/>
+  <circle cx="366" cy="256" r="10" fill="#F59E0B" opacity="0.9"/>
+
+  <!-- Handle bar -->
+  <rect x="300" y="248" width="60" height="16" rx="8" fill="#F59E0B" opacity="0.9"/>
+</svg>

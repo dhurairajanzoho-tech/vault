@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Vault",
+    "slug": "vault-budget",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0A0A0A"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.vault.budget"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0A0A0A"
+      },
+      "package": "com.vault.budget"
+    },
+    "plugins": [
+      "expo-router",
+      ["expo-image-picker", {
+        "photosPermission": "Allow Vault to scan receipts."
+      }],
+      ["expo-camera", {
+        "cameraPermission": "Allow Vault to use the camera for receipt scanning."
+      }]
+    ],
+    "scheme": "vault"
+  }
+}
