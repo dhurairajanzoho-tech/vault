@@ -3,11 +3,9 @@
  * The actual Notion API key is kept server-side; web/mobile call /api/*
  */
 
-const BASE_URL = typeof process !== 'undefined' && process.env?.VITE_API_URL
-  ? process.env.VITE_API_URL
-  : (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
-    ? import.meta.env.VITE_API_URL
-    : 'http://localhost:3001';
+const BASE_URL = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
+  ? import.meta.env.VITE_API_URL
+  : '';
 
 class NotionClient {
   constructor() {
