@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useMobile } from '../hooks/useMobile';
 import { useBudget } from '../../../shared/hooks/useBudget.js';
 import { useExpenses } from '../../../shared/hooks/useExpenses.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
@@ -11,6 +12,7 @@ import { Modal } from '../components/common/Modal';
 export const Budget = () => {
   const { theme } = useTheme();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   const { getBudgetStatus, upsertBudgetLimit, loading: budLoading } = useBudget();
   const { byCategory, loading: expLoading } = useExpenses();
@@ -71,8 +73,8 @@ export const Budget = () => {
     <div className="fade-in" style={{ maxWidth: 800 }}>
 
       {/* ── Header ── */}
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text }}>Budget Limits</h1>
+      <div style={{ marginBottom: 20 }}>
+        <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: c.text }}>Budget Limits</h1>
         <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>
           Set and monitor monthly spending limits per category
         </p>

@@ -217,8 +217,8 @@ export const Wallet = () => {
     <div className="fade-in" style={{ maxWidth: 680 }}>
 
       {/* Header */}
-      <div style={{ marginBottom: 20 }}>
-        <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>
+      <div style={{ marginBottom: 18 }}>
+        <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>
           💳 Wallet
         </h1>
         <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>

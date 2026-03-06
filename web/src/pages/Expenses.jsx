@@ -299,9 +299,9 @@ export const Expenses = () => {
                     return (
                       <div key={expense.id} style={{
                         background: c.surface, border: `1px solid ${c.cardBorder}`,
-                        borderRadius: 14, padding: '12px 16px',
+                        borderRadius: 14, padding: '11px 14px',
                       }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
                           {/* Icon */}
                           <div style={{
                             width: 40, height: 40, borderRadius: 11, flexShrink: 0,
@@ -312,54 +312,53 @@ export const Expenses = () => {
                             {cat?.icon || '💳'}
                           </div>
 
-                          {/* Details */}
+                          {/* Details — full width, amount + name on top row */}
                           <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: 14, fontWeight: 600, color: c.text, marginBottom: 3 }}>
-                              {expense.name}
+                            {/* Name + amount on same row */}
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4, gap: 8 }}>
+                              <div style={{ fontSize: 14, fontWeight: 600, color: c.text, flex: 1, minWidth: 0, lineHeight: 1.3 }}>
+                                {expense.name}
+                              </div>
+                              <div style={{ fontSize: 15, fontWeight: 800, color: '#F44336', flexShrink: 0 }}>
+                                {formatCurrency(expense.amount)}
+                              </div>
                             </div>
-                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                            {/* Tags row + actions */}
+                            <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', alignItems: 'center' }}>
                               <span style={{
-                                fontSize: 10.5, color: cat?.color || c.subtext,
+                                fontSize: 10, color: cat?.color || c.subtext,
                                 background: `${cat?.color || c.accent}1A`,
                                 border: `1px solid ${cat?.color || c.accent}30`,
-                                padding: '1px 7px', borderRadius: 20,
+                                padding: '1px 6px', borderRadius: 20,
                               }}>{cat?.label || expense.category}</span>
-                              <span style={{ fontSize: 11, color: c.subtext }}>{expense.paymentMethod}</span>
-                              {expense.notes && <span style={{ fontSize: 11, color: c.subtext }}>📝 {expense.notes}</span>}
+                              <span style={{ fontSize: 10.5, color: c.subtext }}>{expense.paymentMethod}</span>
+                              {expense.notes && <span style={{ fontSize: 10.5, color: c.subtext }}>📝 {expense.notes}</span>}
                               {expense.receiptImageUrl && (
-                                <a
-                                  href={expense.receiptImageUrl} target="_blank" rel="noopener noreferrer"
-                                  style={{ fontSize: 11, color: c.accent }}
-                                >🧾 receipt</a>
+                                <a href={expense.receiptImageUrl} target="_blank" rel="noopener noreferrer"
+                                  style={{ fontSize: 10.5, color: c.accent }}>🧾</a>
                               )}
+                              {/* Actions inline with tags */}
+                              <div style={{ marginLeft: 'auto', display: 'flex', gap: 5, flexShrink: 0 }}>
+                                <button
+                                  onClick={() => setEditExpense(expense)}
+                                  style={{
+                                    background: 'transparent', border: `1px solid ${c.border}`,
+                                    borderRadius: 7, padding: '3px 8px', cursor: 'pointer',
+                                    color: c.subtext, fontSize: 12,
+                                  }}
+                                >✏️</button>
+                                <button
+                                  onClick={() => handleDelete(expense.id)}
+                                  disabled={deletingId === expense.id}
+                                  style={{
+                                    background: 'transparent', border: '1px solid rgba(244,67,54,0.3)',
+                                    borderRadius: 7, padding: '3px 8px', cursor: 'pointer',
+                                    color: '#F44336', fontSize: 12,
+                                    opacity: deletingId === expense.id ? 0.5 : 1,
+                                  }}
+                                >🗑️</button>
+                              </div>
                             </div>
-                          </div>
-
-                          {/* Amount */}
-                          <div style={{ fontSize: 16, fontWeight: 800, color: '#F44336', flexShrink: 0 }}>
-                            {formatCurrency(expense.amount)}
-                          </div>
-
-                          {/* Actions */}
-                          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                            <button
-                              onClick={() => setEditExpense(expense)}
-                              style={{
-                                background: 'transparent', border: `1px solid ${c.border}`,
-                                borderRadius: 8, padding: '5px 9px', cursor: 'pointer',
-                                color: c.subtext, fontSize: 13,
-                              }}
-                            >✏️</button>
-                            <button
-                              onClick={() => handleDelete(expense.id)}
-                              disabled={deletingId === expense.id}
-                              style={{
-                                background: 'transparent', border: '1px solid rgba(244,67,54,0.3)',
-                                borderRadius: 8, padding: '5px 9px', cursor: 'pointer',
-                                color: '#F44336', fontSize: 13,
-                                opacity: deletingId === expense.id ? 0.5 : 1,
-                              }}
-                            >🗑️</button>
                           </div>
                         </div>
                       </div>

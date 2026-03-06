@@ -559,55 +559,52 @@ body[data-font-size="comfortable"] { font-size: 15px; }
    MEDIA — MOBILE
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  /* Hide sidebar */
+  /* Hide sidebar, show mobile nav */
   .app-sidebar { display: none !important; }
-
-  /* Show mobile nav */
   .mobile-bottom-nav { display: flex; }
   .mobile-only { display: flex !important; }
   .desktop-only { display: none !important; }
 
-  /* Page content */
-  .page-content { padding: 16px 16px 80px; }
+  /* Page content — bottom padding for fixed nav */
+  .page-content { padding: 14px 14px 80px; }
 
   /* Typography */
-  .page-title { font-size: 22px; }
+  .page-title { font-size: 21px; }
 
-  /* Cards */
-  .card { border-radius: 12px; padding: 14px; }
+  /* Cards — tighter padding on mobile */
+  .card { border-radius: 12px; padding: 14px 14px; }
 
-  /* Grids collapse to single column */
-  .stat-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
-  .two-col-grid { grid-template-columns: 1fr; }
-  .stats-summary-grid { grid-template-columns: 1fr 1fr; }
-  .top3-grid { flex-direction: column; }
+  /* Grids */
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-grid > *:last-child:nth-child(odd) {
+    grid-column: span 2;
+  }
+  .two-col-grid { grid-template-columns: 1fr; gap: 12px; }
+  .stats-summary-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .top3-grid { flex-direction: row; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  .top3-grid > * { min-width: 150px; flex-shrink: 0; }
 
   /* Modal — bottom sheet */
-  .modal-overlay {
-    align-items: flex-end !important;
-    padding: 0 !important;
-  }
+  .modal-overlay { align-items: flex-end !important; padding: 0 !important; }
   .modal-box {
-    border-radius: 20px 20px 0 0 !important;
+    border-radius: 22px 22px 0 0 !important;
     width: 100% !important;
     max-width: 100% !important;
-    max-height: 88vh !important;
+    max-height: 92vh !important;
   }
 
   /* FAB — above bottom nav */
-  .fab-btn { bottom: 76px !important; right: 16px !important; }
+  .fab-btn { bottom: 72px !important; right: 14px !important; }
 
-  /* Page headers that are flex row — allow wrapping */
-  .page-header-row {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+  /* Page headers */
+  .page-header-row { flex-wrap: wrap; gap: 10px; }
 
-  /* Filter bars — stack on mobile */
-  .filter-bar {
-    flex-direction: column !important;
-    align-items: stretch !important;
-  }
+  /* Filter bars — stack vertically */
+  .filter-bar { flex-direction: column !important; align-items: stretch !important; }
   .filter-bar > * { width: 100%; }
 
   /* Side hustle table — horizontal scroll */
@@ -615,7 +612,9 @@ body[data-font-size="comfortable"] { font-size: 15px; }
   .sh-table-wrap .table-header,
   .sh-table-wrap .table-row { min-width: 560px; }
 
-  /* Stats top3 — scroll horizontally */
-  .top3-grid { flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
-  .top3-grid > * { min-width: 140px; flex-shrink: 0; }
+  /* Touch targets — minimum 44px height on interactive elements */
+  button, [role="button"] { min-height: 36px; }
+
+  /* Inputs larger on mobile for easier typing */
+  .input { font-size: 16px !important; padding: 13px 14px !important; }
 }

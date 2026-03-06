@@ -269,7 +269,7 @@ export const SideHustle = () => {
       {/* ── HEADER ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>
             💼 Side Hustle
           </h1>
           <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>

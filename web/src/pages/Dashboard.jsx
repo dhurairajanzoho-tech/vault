@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useMobile } from '../hooks/useMobile';
 import { useExpenses } from '../../../shared/hooks/useExpenses.js';
 import { useIncome } from '../../../shared/hooks/useIncome.js';
 import { useBudget } from '../../../shared/hooks/useBudget.js';
@@ -58,6 +59,7 @@ const DeltaBadge = ({ delta, inverse = false }) => {
 const StatCard = ({ title, icon, amount, subtitle, color, loading, delta, deltaInverse }) => {
   const { theme } = useTheme();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   if (loading) return <CardSkeleton />;
 
@@ -65,16 +67,16 @@ const StatCard = ({ title, icon, amount, subtitle, color, loading, delta, deltaI
     <Card>
       <div>
         <div style={{
-          fontSize: 11, fontWeight: 700, color: c.subtext,
-          textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10,
+          fontSize: 10, fontWeight: 700, color: c.subtext,
+          textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8,
         }}>
           {icon} {title}
         </div>
-        <div style={{ fontSize: 28, fontWeight: 800, color: color || c.text, letterSpacing: '-0.02em' }}>
+        <div style={{ fontSize: isMobile ? 22 : 28, fontWeight: 800, color: color || c.text, letterSpacing: '-0.02em' }}>
           {formatCurrency(amount)}
         </div>
-        {subtitle && (
-          <div style={{ fontSize: 12, color: c.subtext, marginTop: 6 }}>{subtitle}</div>
+        {subtitle && !isMobile && (
+          <div style={{ fontSize: 11, color: c.subtext, marginTop: 5 }}>{subtitle}</div>
         )}
         <DeltaBadge delta={delta} inverse={deltaInverse} />
       </div>
@@ -130,6 +132,7 @@ export const Dashboard = () => {
   const { theme } = useTheme();
   const { defaultPaymentMethod } = useApp();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   const [selectedMonth, setSelectedMonth] = useState(getMonthKey());
   const [prevStats, setPrevStats] = useState(null);
@@ -188,13 +191,13 @@ export const Dashboard = () => {
   return (
     <div className="fade-in" style={{ maxWidth: 1100 }}>
       {/* Header */}
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+      <div style={{ marginBottom: 18 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
           <div>
-            <h1 style={{ fontSize: 28, fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>
+            <h1 style={{ fontSize: isMobile ? 22 : 28, fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>
               {monthLabel}
             </h1>
-            <p style={{ color: c.subtext, fontSize: 14, marginTop: 4 }}>Your financial overview</p>
+            <p style={{ color: c.subtext, fontSize: isMobile ? 12 : 14, marginTop: 3 }}>Your financial overview</p>
           </div>
           {showStatsHint && (
             <a href="/stats" style={{
@@ -202,11 +205,11 @@ export const Dashboard = () => {
               border: `1px solid ${c.cardBorder}`,
               color: c.accent,
               borderRadius: 10,
-              padding: '8px 16px',
-              fontSize: 13, fontWeight: 600,
-              textDecoration: 'none',
+              padding: isMobile ? '7px 12px' : '8px 16px',
+              fontSize: 12, fontWeight: 600,
+              textDecoration: 'none', whiteSpace: 'nowrap',
             }}>
-              📊 Month-end stats ready
+              📊 {isMobile ? 'Stats' : 'Month-end stats ready'}
             </a>
           )}
         </div>

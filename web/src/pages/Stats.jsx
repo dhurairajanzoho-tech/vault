@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import { useMobile } from '../hooks/useMobile';
 import notionClient from '../../../shared/utils/notionClient.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { getMonthLabel, getMonthKey, getLastSixMonths } from '../../../shared/utils/dateUtils.js';
@@ -119,6 +120,7 @@ const SavingsRing = ({ percent, c }) => {
 export const Stats = () => {
   const { theme } = useTheme();
   const c = theme.colors;
+  const isMobile = useMobile();
 
   const months = getLastSixMonths();
   const [stats, setStats] = useState(null);
@@ -167,9 +169,9 @@ export const Stats = () => {
     <div className="fade-in" style={{ maxWidth: 1000 }}>
 
       {/* ── Header ── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 22 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text }}>Statistics</h1>
+          <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: c.text }}>Statistics</h1>
           <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>{selectedLabel}</p>
         </div>
         <button
@@ -177,7 +179,7 @@ export const Stats = () => {
           disabled={exporting || !stats}
           style={{
             background: c.accentLight, border: `1px solid ${c.cardBorder}`,
-            color: c.accent, borderRadius: 10, padding: '9px 16px',
+            color: c.accent, borderRadius: 10, padding: '9px 14px',
             cursor: exporting || !stats ? 'not-allowed' : 'pointer',
             fontWeight: 600, fontSize: 13, fontFamily: 'Inter, sans-serif',
             opacity: !stats ? 0.5 : 1,
@@ -190,7 +192,7 @@ export const Stats = () => {
               borderTopColor: c.accent, borderRadius: '50%',
               display: 'inline-block', animation: 'spin 0.7s linear infinite',
             }} />
-          ) : '📄'} Export PDF
+          ) : '📄'} {isMobile ? 'PDF' : 'Export PDF'}
         </button>
       </div>
 

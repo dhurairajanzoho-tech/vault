@@ -615,8 +615,8 @@ export const Settings = () => {
       {showChangePin && <ChangePinModal c={c} onClose={() => setShowChangePin(false)} />}
 
       {/* Page header */}
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: 26, fontWeight: 700, color: c.text, letterSpacing: '-0.03em' }}>
+      <div style={{ marginBottom: 20 }}>
+        <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 700, color: c.text, letterSpacing: '-0.03em' }}>
           Settings
         </h1>
         <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>

@@ -144,7 +144,7 @@ export const Income = () => {
       {/* ── Header ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 22, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text }}>Income</h1>
+          <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: c.text }}>Income</h1>
           <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>
             {months.find(m => m.key === selectedMonth)?.label || selectedMonth}
             {' · '}<span style={{ color: '#4CAF50', fontWeight: 700 }}>{formatCurrency(totalIncome)} earned</span>
