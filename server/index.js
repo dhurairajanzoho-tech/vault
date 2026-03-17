@@ -47,12 +47,16 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(errorHandler);
 
-const PORT = config.port;
-app.listen(PORT, () => {
-  console.log(`\n🏦 Vault API running on http://localhost:${PORT}`);
-  console.log(`   Mode: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`   Configured: ${config.isConfigured() ? '✅' : '❌ (run setup first)'}\n`);
-  startCronJobs();
-});
+// Start server only when run directly (Railway / local dev)
+// When imported by Vercel's serverless entry point, skip listen()
+if (require.main === module) {
+  const PORT = config.port;
+  app.listen(PORT, () => {
+    console.log(`\nVault API running on http://localhost:${PORT}`);
+    console.log(`   Mode: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`   Configured: ${config.isConfigured() ? 'yes' : 'no (run setup first)'}\n`);
+    startCronJobs();
+  });
+}
 
 module.exports = app;

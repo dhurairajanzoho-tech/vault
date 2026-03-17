@@ -9,6 +9,7 @@ import { Card, CardHeader } from '../components/common/Card';
 import { EmptyState } from '../components/common/EmptyState';
 import { SkeletonList } from '../components/common/Skeleton';
 import { Modal } from '../components/common/Modal';
+import { Building2, Briefcase, Banknote, Save, RefreshCw } from 'lucide-react';
 
 // ── Month Pill ─────────────────────────────────────────────────────────────────
 
@@ -62,7 +63,7 @@ const IncomeRow = ({ entry, isLast, c }) => {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 17,
       }}>
-        {isSalary ? '🏢' : '💼'}
+        {isSalary ? <Building2 size={17} /> : <Briefcase size={17} />}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: c.text, marginBottom: 2 }}>{entry.source}</div>
@@ -172,9 +173,9 @@ export const Income = () => {
 
       {/* ── Summary Stats ── */}
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: 12, marginBottom: 20 }}>
-        <MiniStat label="Work Salary" value={formatCurrency(workSalary.amount)} icon="🏢" color={c.accent} c={c} />
-        <MiniStat label="Side Hustle" value={formatCurrency(sideHustleTotal)} icon="💼" color="#7B2FBE" c={c} />
-        <MiniStat label="Total Income" value={formatCurrency(totalIncome)} icon="💵" color="#4CAF50" c={c} />
+        <MiniStat label="Work Salary" value={formatCurrency(workSalary.amount)} icon={<Building2 size={18} />} color={c.accent} c={c} />
+        <MiniStat label="Side Hustle" value={formatCurrency(sideHustleTotal)} icon={<Briefcase size={18} />} color="#7B2FBE" c={c} />
+        <MiniStat label="Total Income" value={formatCurrency(totalIncome)} icon={<Banknote size={18} />} color="#4CAF50" c={c} />
       </div>
 
       {/* ── Income Distribution Bar ── */}
@@ -228,8 +229,8 @@ export const Income = () => {
             <button onClick={refresh} style={{
               background: 'transparent', border: `1px solid ${c.border}`,
               borderRadius: 8, padding: '5px 10px', cursor: 'pointer',
-              color: c.subtext, fontSize: 12, fontFamily: 'Inter, sans-serif',
-            }}>🔄</button>
+              color: c.subtext, fontFamily: 'Inter, sans-serif', display: 'flex', alignItems: 'center',
+            }}><RefreshCw size={13} /></button>
           </div>
         </div>
 
@@ -305,7 +306,8 @@ export const Income = () => {
               flex: 2, padding: '13px', borderRadius: 12, border: 'none',
               background: c.accent, color: '#000', cursor: 'pointer',
               fontFamily: 'Inter, sans-serif', fontWeight: 700, opacity: submitting ? 0.7 : 1,
-            }}>{submitting ? 'Saving...' : '💾 Save Income'}</button>
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            }}>{submitting ? 'Saving...' : <><Save size={14} /> Save Income</>}</button>
           </div>
         </form>
       </Modal>

@@ -7,6 +7,7 @@ import { getMonthKey, getLastSixMonths, getMonthLabel } from '../../../shared/ut
 import { Card, CardHeader } from '../components/common/Card';
 import { CardSkeleton } from '../components/common/Skeleton';
 import { WORK_SALARY_AMOUNT } from '../../../shared/constants/categories.js';
+import { Wallet as WalletIcon, CreditCard, Briefcase, ArrowUpFromLine, AlertTriangle, Upload } from 'lucide-react';
 
 // ── API ────────────────────────────────────────────────────────────────────────
 
@@ -76,8 +77,8 @@ const TransferModal = ({ onClose, onConfirm, shProfit, c }) => {
         border: `1px solid ${c.border}`,
         boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
       }}>
-        <div style={{ fontSize: 16, fontWeight: 800, color: c.text, marginBottom: 4 }}>
-          💸 Transfer to Wallet
+        <div style={{ fontSize: 16, fontWeight: 800, color: c.text, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <ArrowUpFromLine size={16} /> Transfer to Wallet
         </div>
         <div style={{ fontSize: 12, color: c.subtext, marginBottom: 20 }}>
           Side hustle balance: <strong style={{ color: '#7B2FBE' }}>{formatCurrency(shProfit)}</strong>
@@ -125,7 +126,7 @@ const TransferModal = ({ onClose, onConfirm, shProfit, c }) => {
               fontFamily: 'Inter, sans-serif', fontSize: 13, fontWeight: 700,
               transition: 'all 150ms ease',
             }}>
-            💸 Add to Wallet
+            Add to Wallet
           </button>
         </div>
       </div>
@@ -219,7 +220,7 @@ export const Wallet = () => {
       {/* Header */}
       <div style={{ marginBottom: 18 }}>
         <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>
-          💳 Wallet
+          Wallet
         </h1>
         <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>
           {monthLabel} · Main income balance
@@ -248,7 +249,7 @@ export const Wallet = () => {
               fontSize: 10, fontWeight: 700, color: c.subtext,
               textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6,
             }}>
-              💳 Main Wallet Balance
+              Main Wallet Balance
             </div>
             <div style={{
               fontSize: isMobile ? 34 : 46, fontWeight: 900, color: balanceColor,
@@ -257,8 +258,8 @@ export const Wallet = () => {
               {formatCurrency(walletBalance)}
             </div>
             {walletBalance < 0 && (
-              <div style={{ fontSize: 12, color: '#F44336', marginTop: 5, fontWeight: 600 }}>
-                ⚠️ Overspent this month
+              <div style={{ fontSize: 12, color: '#F44336', marginTop: 5, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <AlertTriangle size={12} /> Overspent this month
               </div>
             )}
           </div>
@@ -342,7 +343,7 @@ export const Wallet = () => {
                 fontSize: 10, fontWeight: 700, color: c.subtext,
                 textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4,
               }}>
-                💼 Side Hustle Pocket
+                Side Hustle Pocket
               </div>
               <div style={{
                 fontSize: 32, fontWeight: 800,
@@ -373,7 +374,7 @@ export const Wallet = () => {
                     boxShadow: '0 4px 14px rgba(123,47,190,0.4)',
                     whiteSpace: 'nowrap', transition: 'all 150ms ease',
                   }}>
-                  💸 Add {formatCurrency(shAvailable)} to Wallet
+                  Add {formatCurrency(shAvailable)} to Wallet
                 </button>
               ) : shProfit > 0 ? (
                 <div style={{
@@ -420,7 +421,7 @@ export const Wallet = () => {
       {/* Transfers log */}
       {transfers.length > 0 && (
         <Card style={{ marginBottom: 16 }}>
-          <CardHeader title="Transferred This Month" icon="📤" />
+          <CardHeader title="Transferred This Month" icon={<Upload size={14} />} />
           {transfers.map((t, i) => (
             <div key={t.id} style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -460,7 +461,7 @@ export const Wallet = () => {
         background: c.surfaceElevated, border: `1px solid ${c.border}`,
         fontSize: 12, color: c.subtext, lineHeight: 1.6,
       }}>
-        💡 <strong style={{ color: c.text }}>Main wallet</strong> = salary (₹{salary.toLocaleString('en-IN')})
+        <strong style={{ color: c.text }}>Main wallet</strong> = salary (₹{salary.toLocaleString('en-IN')})
         {' '}minus your expenses. Side hustle stays separate — transfer it when you want it counted.
       </div>
 

@@ -12,6 +12,8 @@ import { SkeletonList } from '../components/common/Skeleton';
 import { AddExpenseForm } from '../components/forms/AddExpenseForm';
 import { useApp } from '../context/AppContext';
 import notionClient from '../../../shared/utils/notionClient.js';
+import { RefreshCw, CreditCard, AlertTriangle, FileText, Pencil, Trash2, Download } from 'lucide-react';
+import { CategoryIcon } from '../utils/categoryIcons';
 
 // ── OCR helper ────────────────────────────────────────────────────────────────
 
@@ -63,7 +65,7 @@ export const Expenses = () => {
   const [ocrPrefill, setOcrPrefill] = useState(null);
   const fileInputRef = useRef(null);
 
-  const { expenses, loading, addExpense, updateExpense, deleteExpense, refresh, totalSpent } = useExpenses(selectedMonth);
+  const { expenses, loading, addExpense, updateExpense, deleteExpense, refresh, totalSpent, offline } = useExpenses(selectedMonth);
 
   const filtered = expenses.filter(e => {
     const matchSearch = !search ||
@@ -134,6 +136,29 @@ export const Expenses = () => {
     fileInputRef.current?.click();
   };
 
+  const exportCSV = () => {
+    const header = ['Date', 'Description', 'Category', 'Amount', 'Payment Method', 'Notes'];
+    const rows = filtered.map(e => {
+      const cat = getCat(e.category);
+      return [
+        e.date || '',
+        `"${(e.name || '').replace(/"/g, '""')}"`,
+        cat?.label || e.category || '',
+        e.amount,
+        e.paymentMethod || '',
+        `"${(e.notes || '').replace(/"/g, '""')}"`,
+      ].join(',');
+    });
+    const csv = [header.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `vault-expenses-${selectedMonth}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   // ─────────────────────────────────────────────────────────────────────────
 
   const inputStyle = {
@@ -157,7 +182,7 @@ export const Expenses = () => {
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-          <button onClick={refresh} style={{ ...inputStyle, cursor: 'pointer', padding: '9px 12px' }} title="Refresh">🔄</button>
+          <button onClick={refresh} style={{ ...inputStyle, cursor: 'pointer', padding: '9px 12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Refresh"><RefreshCw size={15} /></button>
 
           {/* Hidden file input for OCR */}
           <input
@@ -187,6 +212,20 @@ export const Expenses = () => {
             {!isMobile && (ocrLoading ? 'Scanning…' : 'Scan')}
           </button>
 
+          {filtered.length > 0 && (
+            <button
+              onClick={exportCSV}
+              title="Export to CSV"
+              style={{
+                ...inputStyle, cursor: 'pointer', padding: '9px 12px',
+                display: 'flex', alignItems: 'center', gap: 5,
+                color: c.subtext, whiteSpace: 'nowrap',
+              }}
+            >
+              <Download size={14} />
+              {!isMobile && 'CSV'}
+            </button>
+          )}
           <button
             onClick={() => { setOcrPrefill(null); setShowAddModal(true); }}
             style={{
@@ -208,6 +247,19 @@ export const Expenses = () => {
         ))}
       </div>
 
+      {/* ── Offline banner ── */}
+      {offline && (
+        <div style={{
+          background: '#FF980018', border: '1px solid #FF980044',
+          borderRadius: 10, padding: '8px 14px', color: '#FF9800',
+          fontSize: 12, fontWeight: 600, marginBottom: 12,
+          display: 'flex', alignItems: 'center', gap: 6,
+        }}>
+          <AlertTriangle size={13} /> Showing cached data — server unreachable.
+          <button onClick={refresh} style={{ background: 'none', border: 'none', color: '#FF9800', cursor: 'pointer', fontWeight: 700, fontSize: 12, padding: 0, marginLeft: 4 }}>Retry</button>
+        </div>
+      )}
+
       {/* ── OCR error banner ── */}
       {ocrError && (
         <div style={{
@@ -216,7 +268,7 @@ export const Expenses = () => {
           fontSize: 13, marginBottom: 16,
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         }}>
-          <span>⚠️ {ocrError}</span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><AlertTriangle size={13} /> {ocrError}</span>
           <button
             onClick={() => setOcrError('')}
             style={{ background: 'none', border: 'none', color: '#F44336', cursor: 'pointer', fontSize: 16, lineHeight: 1 }}
@@ -228,14 +280,14 @@ export const Expenses = () => {
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 10, marginBottom: 16 }}>
         <input
           style={{ ...inputStyle, flex: 1 }}
-          placeholder="🔍 Search expenses..."
+          placeholder="Search expenses..."
           value={search} onChange={e => setSearch(e.target.value)}
         />
         <div style={{ display: 'flex', gap: 10 }}>
           <select style={{ ...inputStyle, cursor: 'pointer', flex: 1 }} value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
             <option value="">All Categories</option>
             {DEFAULT_CATEGORIES.map(cat => (
-              <option key={cat.id} value={cat.id}>{cat.icon} {cat.label}</option>
+              <option key={cat.id} value={cat.id}>{cat.label}</option>
             ))}
           </select>
           <select style={{ ...inputStyle, cursor: 'pointer', flex: 1 }} value={filterPayment} onChange={e => setFilterPayment(e.target.value)}>
@@ -307,9 +359,9 @@ export const Expenses = () => {
                             width: 40, height: 40, borderRadius: 11, flexShrink: 0,
                             background: `${cat?.color || c.accent}22`,
                             border: `1px solid ${cat?.color || c.accent}44`,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 19,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
                           }}>
-                            {cat?.icon || '💳'}
+                            {cat ? <CategoryIcon id={cat.id} size={18} color={cat.color} /> : <CreditCard size={18} color={c.accent} />}
                           </div>
 
                           {/* Details — full width, amount + name on top row */}
@@ -332,10 +384,10 @@ export const Expenses = () => {
                                 padding: '1px 6px', borderRadius: 20,
                               }}>{cat?.label || expense.category}</span>
                               <span style={{ fontSize: 10.5, color: c.subtext }}>{expense.paymentMethod}</span>
-                              {expense.notes && <span style={{ fontSize: 10.5, color: c.subtext }}>📝 {expense.notes}</span>}
+                              {expense.notes && <span style={{ fontSize: 10.5, color: c.subtext }}>{expense.notes}</span>}
                               {expense.receiptImageUrl && (
                                 <a href={expense.receiptImageUrl} target="_blank" rel="noopener noreferrer"
-                                  style={{ fontSize: 10.5, color: c.accent }}>🧾</a>
+                                  style={{ fontSize: 10.5, color: c.accent, display: 'inline-flex', alignItems: 'center', gap: 3 }}><FileText size={10} /> Receipt</a>
                               )}
                               {/* Actions inline with tags */}
                               <div style={{ marginLeft: 'auto', display: 'flex', gap: 5, flexShrink: 0 }}>
@@ -346,17 +398,17 @@ export const Expenses = () => {
                                     borderRadius: 7, padding: '3px 8px', cursor: 'pointer',
                                     color: c.subtext, fontSize: 12,
                                   }}
-                                >✏️</button>
+                                ><Pencil size={11} /></button>
                                 <button
                                   onClick={() => handleDelete(expense.id)}
                                   disabled={deletingId === expense.id}
                                   style={{
                                     background: 'transparent', border: '1px solid rgba(244,67,54,0.3)',
                                     borderRadius: 7, padding: '3px 8px', cursor: 'pointer',
-                                    color: '#F44336', fontSize: 12,
+                                    color: '#F44336', display: 'flex', alignItems: 'center',
                                     opacity: deletingId === expense.id ? 0.5 : 1,
                                   }}
-                                >🗑️</button>
+                                ><Trash2 size={11} /></button>
                               </div>
                             </div>
                           </div>
@@ -375,7 +427,7 @@ export const Expenses = () => {
       <Modal
         isOpen={showAddModal}
         onClose={() => { setShowAddModal(false); setOcrPrefill(null); }}
-        title={ocrPrefill ? '📷 Add Expense from Receipt' : 'Add Expense'}
+        title={ocrPrefill ? 'Add Expense from Receipt' : 'Add Expense'}
       >
         <AddExpenseForm
           onSubmit={handleAdd}

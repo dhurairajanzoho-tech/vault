@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { Landmark } from 'lucide-react';
 
 const PIN_LENGTH = 4;
 
@@ -137,10 +138,10 @@ export const LoginScreen = () => {
           background: `linear-gradient(135deg, ${c.accent}22, ${c.accent}44)`,
           border: `1px solid ${c.accent}44`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 36, marginBottom: 20,
+          marginBottom: 20,
           boxShadow: `0 0 40px ${c.accent}22`,
         }}>
-          🏦
+          <Landmark size={36} color={c.accent} />
         </div>
 
         <h1 style={{

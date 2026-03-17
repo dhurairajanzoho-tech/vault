@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useMobile } from '../hooks/useMobile';
+import { Pencil, Save } from 'lucide-react';
+import { CategoryIcon } from '../utils/categoryIcons';
 import { useBudget } from '../../../shared/hooks/useBudget.js';
 import { useExpenses } from '../../../shared/hooks/useExpenses.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
@@ -168,15 +170,15 @@ export const Budget = () => {
                   <div style={{
                     width: 44, height: 44, borderRadius: 12, flexShrink: 0,
                     background: `${b.color}22`, border: `1px solid ${b.color}44`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    {b.icon}
+                    <CategoryIcon id={b.id} size={20} color={b.color} />
                   </div>
 
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: hasLimit ? 8 : 4 }}>
-                      <span style={{ fontSize: 15, fontWeight: 600, color: c.text }}>{b.label}</span>
-                      <span style={{ fontSize: 14, fontWeight: 700, color: '#F44336' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: hasLimit ? 8 : 4, gap: 6 }}>
+                      <span style={{ fontSize: isMobile ? 13 : 15, fontWeight: 600, color: c.text, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{b.label}</span>
+                      <span style={{ fontSize: isMobile ? 12 : 14, fontWeight: 700, color: '#F44336', whiteSpace: 'nowrap', flexShrink: 0 }}>
                         {formatCurrency(b.spent)}
                         {hasLimit && (
                           <span style={{ color: c.subtext, fontWeight: 400, fontSize: 12 }}>
@@ -202,7 +204,7 @@ export const Budget = () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <span style={{ fontSize: 11, color: statusColor, fontWeight: 600 }}>
                             {b.percent.toFixed(0)}% used
-                            {b.status === 'exceeded' && ' · OVER BUDGET ⚠️'}
+                            {b.status === 'exceeded' && ' · OVER BUDGET'}
                             {b.status === 'danger' && ' · Almost exceeded'}
                           </span>
                           <span style={{ fontSize: 11, color: c.subtext }}>
@@ -220,12 +222,12 @@ export const Budget = () => {
                     style={{
                       flexShrink: 0, background: hasLimit ? c.accentLight : c.surfaceElevated,
                       border: `1px solid ${hasLimit ? c.cardBorder : c.border}`,
-                      borderRadius: 10, padding: '7px 13px', cursor: 'pointer',
-                      color: hasLimit ? c.accent : c.subtext, fontSize: 12, fontWeight: 600,
+                      borderRadius: 10, padding: isMobile ? '6px 10px' : '7px 13px', cursor: 'pointer',
+                      color: hasLimit ? c.accent : c.subtext, fontSize: isMobile ? 11 : 12, fontWeight: 600,
                       fontFamily: 'Inter, sans-serif',
                     }}
                   >
-                    {hasLimit ? '✏️ Edit' : '+ Set Limit'}
+                    {hasLimit ? (isMobile ? <Pencil size={11} /> : <><Pencil size={11} /> Edit</>) : '+ Set Limit'}
                   </button>
                 </div>
               </div>
@@ -241,9 +243,9 @@ export const Budget = () => {
             <div style={{
               width: 48, height: 48, borderRadius: 12,
               background: `${editCat?.color}22`, border: `1px solid ${editCat?.color}44`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              {editCat?.icon}
+              <CategoryIcon id={editCat?.id} size={22} color={editCat?.color} />
             </div>
             <div style={{ fontSize: 16, fontWeight: 700, color: c.text }}>{editCat?.label}</div>
           </div>
@@ -281,7 +283,8 @@ export const Budget = () => {
               flex: 2, padding: '13px', borderRadius: 12, border: 'none',
               background: c.accent, color: '#000', cursor: 'pointer',
               fontFamily: 'Inter, sans-serif', fontWeight: 700, opacity: saving ? 0.7 : 1,
-            }}>{saving ? 'Saving...' : '💾 Save Limit'}</button>
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+            }}>{saving ? 'Saving...' : <><Save size={14} /> Save Limit</>}</button>
           </div>
         </form>
       </Modal>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { AlertTriangle, AlertOctagon } from 'lucide-react';
 
 export const AlertBanner = ({ alerts = [] }) => {
   const { theme } = useTheme();
@@ -25,7 +26,10 @@ export const AlertBanner = ({ alerts = [] }) => {
             color: c.text,
           }}
         >
-          <span style={{ fontSize: 16 }}>{alert.type === 'exceeded' ? '🚨' : '⚠️'}</span>
+          {alert.type === 'exceeded'
+            ? <AlertOctagon size={16} color="#F44336" />
+            : <AlertTriangle size={16} color="#FF9800" />
+          }
           <span>{alert.message}</span>
           <div style={{
             marginLeft: 'auto',

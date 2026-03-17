@@ -4,6 +4,7 @@ import { DEFAULT_CATEGORIES, PAYMENT_METHODS } from '../../../../shared/constant
 import { formatCurrency } from '../../../../shared/utils/formatCurrency.js';
 import { todayISO } from '../../../../shared/utils/dateUtils.js';
 import { scanReceipt } from '../../../../shared/utils/ocr.js';
+import { Camera, Save, Loader2 } from 'lucide-react';
 
 export const AddExpenseForm = ({ onSubmit, onCancel, defaultPaymentMethod = 'UPI', prefill = null }) => {
   const { theme } = useTheme();
@@ -39,12 +40,12 @@ export const AddExpenseForm = ({ onSubmit, onCancel, defaultPaymentMethod = 'UPI
           category: result.category || f.category,
           name: f.name || 'Receipt expense',
         }));
-        setScanMsg(`✅ Detected ₹${result.amount} · Category: ${result.category}`);
+        setScanMsg(`Detected ₹${result.amount} · Category: ${result.category}`);
       } else {
-        setScanMsg('⚠️ Could not detect amount. Please enter manually.');
+        setScanMsg('Could not detect amount. Please enter manually.');
       }
     } catch (err) {
-      setScanMsg('❌ Scan failed. Please enter manually.');
+      setScanMsg('Scan failed. Please enter manually.');
     } finally {
       setScanning(false);
     }
@@ -100,7 +101,7 @@ export const AddExpenseForm = ({ onSubmit, onCancel, defaultPaymentMethod = 'UPI
           padding: '10px 14px',
           fontSize: 13, color: c.accent, fontWeight: 600,
         }}>
-          📷 Receipt scanned — review and confirm the details below
+          Receipt scanned — review and confirm the details below
         </div>
       )}
 
@@ -118,7 +119,7 @@ export const AddExpenseForm = ({ onSubmit, onCancel, defaultPaymentMethod = 'UPI
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           }}
         >
-          {scanning ? '⏳ Scanning...' : '📷 Scan Receipt'}
+          {scanning ? <><Loader2 size={14} className="spin" /> Scanning...</> : <><Camera size={14} /> Scan Receipt</>}
         </button>
       </div>
       {scanMsg && (
@@ -161,7 +162,7 @@ export const AddExpenseForm = ({ onSubmit, onCancel, defaultPaymentMethod = 'UPI
           <label style={labelStyle}>Category</label>
           <select style={{ ...inputStyle, cursor: 'pointer' }} value={form.category} onChange={set('category')}>
             {DEFAULT_CATEGORIES.map(cat => (
-              <option key={cat.id} value={cat.id}>{cat.icon} {cat.label}</option>
+              <option key={cat.id} value={cat.id}>{cat.label}</option>
             ))}
           </select>
         </div>
@@ -235,7 +236,7 @@ export const AddExpenseForm = ({ onSubmit, onCancel, defaultPaymentMethod = 'UPI
             opacity: submitting ? 0.7 : 1,
           }}
         >
-          {submitting ? 'Saving...' : '💾 Save Expense'}
+          {submitting ? 'Saving...' : <><Save size={14} /> Save Expense</>}
         </button>
       </div>
     </form>

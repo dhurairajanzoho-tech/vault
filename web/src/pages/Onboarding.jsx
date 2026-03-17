@@ -3,6 +3,8 @@ import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
 import { DEFAULT_CATEGORIES } from '../../../shared/constants/categories.js';
 import notionClient from '../../../shared/utils/notionClient.js';
+import { Key, Briefcase, Target, Loader2, Plug, Link2, Save, Landmark, CheckCircle } from 'lucide-react';
+import { CategoryIcon } from '../utils/categoryIcons';
 
 const STEPS = ['welcome', 'notion', 'sidehustle', 'budget', 'done'];
 
@@ -143,7 +145,7 @@ export const Onboarding = () => {
     <div style={containerStyle}>
       <div style={cardStyle}>
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-          <div style={{ fontSize: 64, marginBottom: 16 }}>🏦</div>
+          <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}><Landmark size={64} color={c.accent} /></div>
           <h1 style={{ fontSize: 36, fontWeight: 800, color: c.accent, letterSpacing: '-0.02em' }}>
             Welcome to Vault
           </h1>
@@ -155,9 +157,9 @@ export const Onboarding = () => {
         <Progress />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 32 }}>
           {[
-            { icon: '🔑', label: 'Connect your Notion workspace' },
-            { icon: '💼', label: 'Link your side hustle database' },
-            { icon: '🎯', label: 'Set your budget limits' },
+            { icon: <Key size={18} />, label: 'Connect your Notion workspace' },
+            { icon: <Briefcase size={18} />, label: 'Link your side hustle database' },
+            { icon: <Target size={18} />, label: 'Set your budget limits' },
           ].map(item => (
             <div key={item.label} style={{
               display: 'flex', alignItems: 'center', gap: 12,
@@ -180,7 +182,7 @@ export const Onboarding = () => {
       <div style={cardStyle}>
         <Progress />
         <h2 style={{ fontSize: 24, fontWeight: 800, color: c.text, marginBottom: 6 }}>
-          🔑 Connect Notion
+          Connect Notion
         </h2>
         <p style={{ color: c.subtext, fontSize: 14, marginBottom: 24, lineHeight: 1.6 }}>
           Create a Notion integration at <a href="https://www.notion.so/my-integrations" target="_blank" rel="noreferrer" style={{ color: c.accent }}>notion.so/my-integrations</a>, copy the API key, and share a Notion page with it.
@@ -210,7 +212,7 @@ export const Onboarding = () => {
         {error && <div style={{ color: '#F44336', fontSize: 13, marginBottom: 12, background: 'rgba(244,67,54,0.1)', padding: '10px 14px', borderRadius: 8 }}>{error}</div>}
 
         <button style={btnPrimary} onClick={handleNotionSetup} disabled={loading || !apiKey || !pageUrl}>
-          {loading ? '⏳ Creating databases...' : '🔌 Connect & Create Databases'}
+          {loading ? <><Loader2 size={14} className="spin" /> Creating databases...</> : <><Plug size={14} /> Connect & Create Databases</>}
         </button>
       </div>
     </div>
@@ -221,7 +223,7 @@ export const Onboarding = () => {
       <div style={cardStyle}>
         <Progress />
         <h2 style={{ fontSize: 24, fontWeight: 800, color: c.text, marginBottom: 6 }}>
-          💼 Side Hustle DB
+          Side Hustle DB
         </h2>
         <p style={{ color: c.subtext, fontSize: 14, marginBottom: 24, lineHeight: 1.6 }}>
           Connect your existing Notion database for side hustle income. We'll map the Amount and Date fields.
@@ -260,7 +262,7 @@ export const Onboarding = () => {
             </select>
             {error && <div style={{ color: '#F44336', fontSize: 13, marginBottom: 12 }}>{error}</div>}
             <button style={btnPrimary} onClick={handleSideHustleMap} disabled={loading}>
-              {loading ? '⏳ Mapping...' : '🔗 Map & Continue'}
+              {loading ? <><Loader2 size={14} className="spin" /> Mapping...</> : <><Link2 size={14} /> Map & Continue</>}
             </button>
           </>
         )}
@@ -279,7 +281,7 @@ export const Onboarding = () => {
       <div style={cardStyle}>
         <Progress />
         <h2 style={{ fontSize: 24, fontWeight: 800, color: c.text, marginBottom: 6 }}>
-          🎯 Set Budget Limits
+          Set Budget Limits
         </h2>
         <p style={{ color: c.subtext, fontSize: 14, marginBottom: 24, lineHeight: 1.6 }}>
           Set your monthly spending limits. You can always change these later.
@@ -291,9 +293,9 @@ export const Onboarding = () => {
               <div style={{
                 width: 40, height: 40, borderRadius: 10, flexShrink: 0,
                 background: `${cat.color}22`, border: `1px solid ${cat.color}44`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                {cat.icon}
+                <CategoryIcon id={cat.id} size={18} color={cat.color} />
               </div>
               <span style={{ flex: 1, fontSize: 14, color: c.text }}>{cat.label}</span>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -319,7 +321,7 @@ export const Onboarding = () => {
         {error && <div style={{ color: '#F44336', fontSize: 13, marginTop: 12 }}>{error}</div>}
 
         <button style={{ ...btnPrimary, marginTop: 20 }} onClick={handleBudgetSetup} disabled={loading}>
-          {loading ? '⏳ Saving...' : '💾 Save Limits & Continue'}
+          {loading ? <><Loader2 size={14} className="spin" /> Saving...</> : <><Save size={14} /> Save Limits & Continue</>}
         </button>
         <button style={btnGhost} onClick={() => setStep(4)}>Skip for now →</button>
       </div>
@@ -331,7 +333,7 @@ export const Onboarding = () => {
       <div style={cardStyle}>
         <Progress />
         <div style={{ textAlign: 'center', padding: '20px 0' }}>
-          <div style={{ fontSize: 64, marginBottom: 20 }}>🎉</div>
+          <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'center' }}><CheckCircle size={64} color={c.accent} /></div>
           <h2 style={{ fontSize: 28, fontWeight: 800, color: c.accent, marginBottom: 12 }}>
             You're all set!
           </h2>
@@ -343,7 +345,7 @@ export const Onboarding = () => {
             style={{ ...btnPrimary, fontSize: 16 }}
             onClick={() => setIsConfigured(true)}
           >
-            🏦 Open Vault Dashboard
+            Open Vault Dashboard
           </button>
         </div>
       </div>

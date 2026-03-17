@@ -9,6 +9,7 @@ import {
   Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
 import notionClient from '../../../shared/utils/notionClient.js';
+import { BarChart2, ClipboardList, TrendingUp, Banknote, RefreshCw, AlertTriangle, Users, Inbox } from 'lucide-react';
 
 // ── Client colour palette ─────────────────────────────────────────────────────
 const PALETTE = [
@@ -245,10 +246,10 @@ export const SideHustle = () => {
   // ── Error state ─────────────────────────────────────────────────────────────
   if (error) return (
     <div className="fade-in" style={{ maxWidth: 1040 }}>
-      <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text, marginBottom: 20 }}>💼 Side Hustle</h1>
+      <h1 style={{ fontSize: 26, fontWeight: 800, color: c.text, marginBottom: 20 }}>Side Hustle</h1>
       <Card>
         <div style={{ textAlign: 'center', padding: '50px 20px' }}>
-          <div style={{ fontSize: 48, marginBottom: 12 }}>⚠️</div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}><AlertTriangle size={48} color="#F44336" /></div>
           <div style={{ fontSize: 15, fontWeight: 600, color: '#F44336', marginBottom: 8 }}>Failed to load data</div>
           <div style={{ fontSize: 13, color: c.subtext, marginBottom: 20, maxWidth: 400, margin: '0 auto 20px' }}>
             {error}. Make sure the server is running and Notion API key is configured.
@@ -256,8 +257,8 @@ export const SideHustle = () => {
           <button onClick={handleRefresh} style={{
             background: c.accent, color: '#000', border: 'none', borderRadius: 10,
             padding: '10px 24px', cursor: 'pointer', fontWeight: 700, fontSize: 13,
-            fontFamily: 'Inter, sans-serif',
-          }}>🔄 Retry</button>
+            fontFamily: 'Inter, sans-serif', display: 'inline-flex', alignItems: 'center', gap: 6,
+          }}><RefreshCw size={14} /> Retry</button>
         </div>
       </Card>
     </div>
@@ -270,7 +271,7 @@ export const SideHustle = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
         <div>
           <h1 style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: c.text, letterSpacing: '-0.02em' }}>
-            💼 Side Hustle
+            Side Hustle
           </h1>
           <p style={{ color: c.subtext, fontSize: 13, marginTop: 4 }}>
             {monthLabel}
@@ -286,7 +287,7 @@ export const SideHustle = () => {
             display: 'flex', background: c.surfaceElevated,
             borderRadius: 10, border: `1px solid ${c.border}`, overflow: 'hidden',
           }}>
-            {[['overview', '📊 Overview'], ['works', '📋 Works']].map(([v, label]) => (
+            {[['overview', <><BarChart2 size={13} style={{display:'inline',verticalAlign:'middle',marginRight:4}} />Overview</>], ['works', <><ClipboardList size={13} style={{display:'inline',verticalAlign:'middle',marginRight:4}} />Works</>]].map(([v, label]) => (
               <button key={v} onClick={() => setView(v)} style={{
                 padding: '7px 14px', border: 'none', cursor: 'pointer',
                 fontFamily: 'Inter, sans-serif', fontSize: 12.5, fontWeight: view === v ? 700 : 400,
@@ -299,9 +300,9 @@ export const SideHustle = () => {
           <button onClick={handleRefresh} title="Refresh from Notion" style={{
             background: c.surfaceElevated, border: `1px solid ${c.border}`,
             borderRadius: 10, padding: '8px 12px', cursor: 'pointer',
-            color: c.subtext, fontSize: 16, lineHeight: 1,
+            color: c.subtext, display: 'flex', alignItems: 'center',
             transition: 'all 150ms ease',
-          }}>🔄</button>
+          }}><RefreshCw size={16} /></button>
         </div>
       </div>
 
@@ -317,7 +318,7 @@ export const SideHustle = () => {
             border: showAll ? '1.5px solid #7B2FBE' : `1.5px solid ${c.cardBorder}`,
             transition: 'all 150ms ease', flexShrink: 0,
             boxShadow: showAll ? '0 0 14px #7B2FBE30' : 'none',
-          }}>📊 All Time</button>
+          }}>All Time</button>
 
           <div style={{ width: 1, height: 20, background: c.border, flexShrink: 0, margin: '0 2px' }} />
 
@@ -349,7 +350,7 @@ export const SideHustle = () => {
       {!trendLoading && trend.length > 0 && (
         <Card style={{ marginBottom: 20 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <CardHeader title="6-Month Trend" icon="📈" />
+            <CardHeader title="6-Month Trend" icon={<TrendingUp size={14} />} />
             <div style={{ display: 'flex', gap: 12, fontSize: 11 }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: c.subtext }}>
                 <span style={{ width: 10, height: 10, borderRadius: 2, background: c.accent, display: 'inline-block' }} /> Revenue
@@ -417,36 +418,36 @@ export const SideHustle = () => {
         <>
           {/* Summary stats */}
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: 14, marginBottom: 20 }}>
-            <StatCard label="Revenue"      value={formatCurrency(summary.totalRevenue)}     sub={`${summary.totalWorks} works`}   color={c.accent}  icon="💰" />
-            <StatCard label="Designer Pay" value={formatCurrency(summary.totalDesignerPay)} sub="Paid out"                         color="#F44336"   icon="💸" />
-            <StatCard label="Your Profit"  value={formatCurrency(summary.totalProfit)}      sub={`${profitMargin}% margin`}        color="#4CAF50"   icon="📈" />
-            <StatCard label="Clients"      value={clients.length}                           sub={`${summary.totalWorks} total`}   color="#2196F3"   icon="👥" />
+            <StatCard label="Revenue"      value={formatCurrency(summary.totalRevenue)}     sub={`${summary.totalWorks} works`}   color={c.accent}  icon={<Banknote size={18} />} />
+            <StatCard label="Designer Pay" value={formatCurrency(summary.totalDesignerPay)} sub="Paid out"                         color="#F44336"   icon={<Banknote size={18} />} />
+            <StatCard label="Your Profit"  value={formatCurrency(summary.totalProfit)}      sub={`${profitMargin}% margin`}        color="#4CAF50"   icon={<TrendingUp size={18} />} />
+            <StatCard label="Clients"      value={clients.length}                           sub={`${summary.totalWorks} total`}   color="#2196F3"   icon={<ClipboardList size={18} />} />
           </div>
 
           {/* Empty state */}
           {summary.totalWorks === 0 ? (
             <Card style={{ marginBottom: 20 }}>
               <div style={{ textAlign: 'center', padding: '50px 20px' }}>
-                <div style={{ fontSize: 48, marginBottom: 14 }}>📭</div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}><Inbox size={48} color={c.subtext} /></div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: c.text, marginBottom: 8 }}>
                   No works in {monthLabel}
                 </div>
                 <div style={{ fontSize: 13, color: c.subtext, marginBottom: 20, maxWidth: 380, margin: '0 auto 20px' }}>
                   Add entries in your Notion "Works (Master Database)" with a Date in {monthLabel},
-                  then click 🔄 to refresh.
+                  then refresh.
                 </div>
                 <button onClick={fetchData} style={{
                   background: c.accent, color: '#000', border: 'none', borderRadius: 10,
                   padding: '10px 24px', cursor: 'pointer', fontWeight: 700, fontSize: 13,
-                  fontFamily: 'Inter, sans-serif',
-                }}>🔄 Refresh</button>
+                  fontFamily: 'Inter, sans-serif', display: 'inline-flex', alignItems: 'center', gap: 6,
+                }}><RefreshCw size={14} /> Refresh</button>
               </div>
             </Card>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 220px', gap: 16, marginBottom: 20 }}>
               {/* Client breakdown */}
               <Card>
-                <CardHeader title="By Client" icon="👥" subtitle="Click a client to filter works" />
+                <CardHeader title="By Client" icon={<Users size={14} />} subtitle="Click a client to filter works" />
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
 
                   {/* All Clients row */}
@@ -586,7 +587,7 @@ export const SideHustle = () => {
               transition: 'all 150ms ease',
               marginBottom: 16,
             }}>
-              📋 View all {summary.totalWorks} works →
+              View all {summary.totalWorks} works →
             </button>
           )}
         </>
@@ -599,7 +600,7 @@ export const SideHustle = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, color: c.text }}>
-                📋 Works
+                Works
                 {activeClient && (
                   <span style={{ marginLeft: 8, color: colorFor(activeClient), fontSize: 13 }}>— {activeClient}</span>
                 )}
@@ -616,7 +617,7 @@ export const SideHustle = () => {
             </div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               <input style={{ ...inputStyle, width: 180 }}
-                placeholder="🔍 Search works…"
+                placeholder="Search works…"
                 value={search} onChange={e => setSearch(e.target.value)} />
               <select style={{ ...inputStyle, cursor: 'pointer' }}
                 value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
@@ -776,10 +777,10 @@ export const SideHustle = () => {
         background: c.surfaceElevated, border: `1px solid ${c.border}`,
         fontSize: 12, color: c.subtext, lineHeight: 1.6,
       }}>
-        💡 <strong style={{ color: c.text }}>Live sync:</strong> Data comes from your Notion
+        <strong style={{ color: c.text }}>Live sync:</strong> Data comes from your Notion
         {' '}<strong style={{ color: c.text }}>Works (Master Database)</strong>.
         Set the <strong style={{ color: c.text }}>Date</strong> field on each entry and it will
-        appear in the right month automatically. Hit 🔄 to refresh.
+        appear in the right month automatically. Hit refresh to update.
       </div>
 
     </div>

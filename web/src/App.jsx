@@ -17,6 +17,7 @@ import { Onboarding } from './pages/Onboarding';
 import { LoginScreen } from './pages/LoginScreen';
 import { SetupPin } from './pages/SetupPin';
 import './styles/globals.css';
+import { Landmark } from 'lucide-react';
 
 /** Full-screen loading spinner shown while auth/app state is resolving */
 const LoadingScreen = () => (
@@ -26,7 +27,7 @@ const LoadingScreen = () => (
     background: 'var(--color-background)',
   }}>
     <div style={{ textAlign: 'center' }}>
-      <div style={{ fontSize: 48, marginBottom: 16 }}>🏦</div>
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}><Landmark size={48} color="var(--color-accent)" /></div>
       <div style={{
         fontSize: 24, fontWeight: 800, color: 'var(--color-accent)',
         letterSpacing: '-0.02em',

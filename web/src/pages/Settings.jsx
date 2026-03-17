@@ -3,6 +3,8 @@ import { useTheme } from '../context/ThemeContext';
 import { useApp } from '../context/AppContext';
 import { useMobile } from '../hooks/useMobile';
 import { useAuth } from '../context/AuthContext';
+import { Palette, Plug, CreditCard, Shield, Tag, FlaskConical, CheckCircle, Key, Clock, Lock, Landmark } from 'lucide-react';
+import { CategoryIcon } from '../utils/categoryIcons';
 import { THEMES, ACCENT_PRESETS, buildThemeFromAccent } from '../../../shared/constants/themes.js';
 import { DEFAULT_CATEGORIES, PAYMENT_METHODS } from '../../../shared/constants/categories.js';
 
@@ -194,7 +196,7 @@ const ChangePinModal = ({ onClose, c }) => {
         <style>{`@keyframes scaleIn{from{opacity:0;transform:scale(0.94)}to{opacity:1;transform:scale(1)}} @keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}30%{transform:translateX(8px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-2px)}}`}</style>
         {success ? (
           <>
-            <div style={{ fontSize: 44 }}>✅</div>
+            <CheckCircle size={44} color="#4CAF50" />
             <div style={{ fontSize: 17, fontWeight: 700, color: c.text }}>PIN Changed!</div>
             <div style={{ fontSize: 12, color: c.subtext }}>Your new PIN is now active.</div>
           </>
@@ -203,8 +205,8 @@ const ChangePinModal = ({ onClose, c }) => {
             <div style={{
               width: 44, height: 44, borderRadius: 12,
               background: c.accentLight, border: `1px solid ${c.cardBorder}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22,
-            }}>🔑</div>
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}><Key size={22} color={c.accent} /></div>
             <div style={{ fontSize: 16, fontWeight: 700, color: c.text }}>Change PIN</div>
             <div style={{ display: 'flex', gap: 5 }}>
               {['current','new','confirm'].map((s, i) => (
@@ -242,6 +244,7 @@ const ChangePinModal = ({ onClose, c }) => {
    ═══════════════════════════════════════════════════════════ */
 const AppearanceSection = ({ c }) => {
   const { theme, themeId, customAccent, bgMode, fontSize, switchTheme, setAccentColor, switchBgMode, switchFontSize } = useTheme();
+  const isMobile = useMobile();
   const [hexInput, setHexInput] = useState(customAccent);
   const [hexError, setHexError] = useState(false);
   const [livePreview, setLivePreview] = useState(null);
@@ -625,12 +628,12 @@ export const Settings = () => {
       </div>
 
       {/* ── Appearance ── */}
-      <Section title="Appearance" icon="🎨" c={c}>
+      <Section title="Appearance" icon={<Palette size={14} />} c={c}>
         <AppearanceSection c={c} />
       </Section>
 
       {/* ── Notion Connection ── */}
-      <Section title="Notion Connection" icon="🔌" c={c}>
+      <Section title="Notion Connection" icon={<Plug size={14} />} c={c}>
         <p style={{ fontSize: 13, color: c.subtext, marginBottom: 16, lineHeight: 1.65 }}>
           To reconnect or update your Notion API key, update your server's{' '}
           <code style={{
@@ -656,7 +659,7 @@ export const Settings = () => {
           >
             {testing ? (
               <span className="spin" style={{ display: 'inline-block', fontSize: 14 }}>⟳</span>
-            ) : '🧪'} Test
+            ) : <FlaskConical size={14} />} Test
           </button>
         </div>
         {testResult && (
@@ -674,7 +677,7 @@ export const Settings = () => {
       </Section>
 
       {/* ── Default Payment ── */}
-      <Section title="Default Payment Method" icon="💳" c={c}>
+      <Section title="Default Payment Method" icon={<CreditCard size={14} />} c={c}>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {PAYMENT_METHODS.map(method => {
             const isActive = defaultPaymentMethod === method;
@@ -700,7 +703,7 @@ export const Settings = () => {
       </Section>
 
       {/* ── Security ── */}
-      <Section title="Security" icon="🔐" c={c}>
+      <Section title="Security" icon={<Shield size={14} />} c={c}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 
           {hasPin && (
@@ -723,7 +726,7 @@ export const Settings = () => {
             fontSize: 12.5, color: c.subtext, lineHeight: 1.6,
             display: 'flex', alignItems: 'center', gap: 10,
           }}>
-            <span style={{ fontSize: 16 }}>🕐</span>
+            <Clock size={16} color={c.subtext} />
             <span>
               Sessions last <strong style={{ color: c.text }}>24 hours</strong>. After that you'll be prompted to re-enter your PIN.
             </span>
@@ -754,7 +757,8 @@ export const Settings = () => {
                 <button
                   onClick={() => setLogoutConfirm(true)}
                   className="btn btn-danger btn-sm"
-                >🔒 Lock</button>
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                ><Lock size={12} /> Lock</button>
               )
             }
           />
@@ -762,7 +766,7 @@ export const Settings = () => {
       </Section>
 
       {/* ── Categories ── */}
-      <Section title="Categories" icon="🏷️" c={c}>
+      <Section title="Categories" icon={<Tag size={14} />} c={c}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
           {DEFAULT_CATEGORIES.map(cat => (
             <div key={cat.id} style={{
@@ -772,7 +776,7 @@ export const Settings = () => {
               border: `1px solid ${cat.color}40`,
               fontSize: 12.5, color: cat.color, fontWeight: 500,
             }}>
-              <span>{cat.icon}</span>
+              <CategoryIcon id={cat.id} size={13} color={cat.color} />
               <span>{cat.label}</span>
             </div>
           ))}
@@ -792,9 +796,8 @@ export const Settings = () => {
           width: 52, height: 52, borderRadius: 14, margin: '0 auto 12px',
           background: theme.colors.accentGradient,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 26,
           boxShadow: `0 0 24px rgba(${c.accentRgb},0.4)`,
-        }}>🏦</div>
+        }}><Landmark size={26} color="#000" /></div>
         <div style={{ fontSize: 20, fontWeight: 800, color: c.accent, letterSpacing: '-0.03em' }}>Vault</div>
         <div style={{ fontSize: 12.5, color: c.subtext, marginTop: 4 }}>Personal Budget Planner v1.0.0</div>
         <div style={{ fontSize: 11.5, color: c.subtext, marginTop: 8, opacity: 0.7 }}>

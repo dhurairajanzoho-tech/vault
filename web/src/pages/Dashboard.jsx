@@ -16,6 +16,8 @@ import { Modal } from '../components/common/Modal';
 import { AddExpenseForm } from '../components/forms/AddExpenseForm';
 import { useApp } from '../context/AppContext';
 import notionClient from '../../../shared/utils/notionClient.js';
+import { Banknote, CreditCard, PiggyBank, PieChart, Target, BarChart2 } from 'lucide-react';
+import { CategoryIcon } from '../utils/categoryIcons';
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -166,7 +168,7 @@ export const Dashboard = () => {
   const alerts = budgetStatus
     .filter(b => b.isAlert && b.monthlyLimit > 0)
     .map(b => ({
-      message: `${b.icon} ${b.label}: ${formatCurrency(b.spent)} of ${formatCurrency(b.monthlyLimit)} limit`,
+      message: `${b.label}: ${formatCurrency(b.spent)} of ${formatCurrency(b.monthlyLimit)} limit`,
       percent: b.percent,
       type: b.status === 'exceeded' ? 'exceeded' : 'warning',
     }));
@@ -209,7 +211,7 @@ export const Dashboard = () => {
               fontSize: 12, fontWeight: 600,
               textDecoration: 'none', whiteSpace: 'nowrap',
             }}>
-              📊 {isMobile ? 'Stats' : 'Month-end stats ready'}
+              <BarChart2 size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} />{isMobile ? 'Stats' : 'Month-end stats ready'}
             </a>
           )}
         </div>
@@ -225,7 +227,7 @@ export const Dashboard = () => {
       <div className="stat-grid">
         <StatCard
           title="Total Income"
-          icon="💵"
+          icon={<Banknote size={18} />}
           amount={totalIncome}
           subtitle={`Salary ₹${(workSalary.amount / 1000).toFixed(0)}K + Side ₹${(sideHustleTotal / 1000).toFixed(1)}K`}
           color={c.accent}
@@ -235,7 +237,7 @@ export const Dashboard = () => {
         />
         <StatCard
           title="Total Expenses"
-          icon="💳"
+          icon={<CreditCard size={18} />}
           amount={totalSpent}
           subtitle={`${expenses.length} transactions`}
           color="#F44336"
@@ -245,7 +247,7 @@ export const Dashboard = () => {
         />
         <StatCard
           title="Savings"
-          icon="💰"
+          icon={<PiggyBank size={18} />}
           amount={savings}
           subtitle={`${savingsPercent.toFixed(1)}% of income saved`}
           color="#4CAF50"
@@ -259,7 +261,7 @@ export const Dashboard = () => {
       <div className="two-col-grid">
         {/* Donut Chart */}
         <Card>
-          <CardHeader title="Spending by Category" icon="🍩" />
+          <CardHeader title="Spending by Category" icon={<PieChart size={14} />} />
           {loading ? (
             <div style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <div className="skeleton" style={{ width: 150, height: 150, borderRadius: '50%' }} />
@@ -271,7 +273,7 @@ export const Dashboard = () => {
 
         {/* Budget Status */}
         <Card>
-          <CardHeader title="Budget Status" icon="🎯" />
+          <CardHeader title="Budget Status" icon={<Target size={14} />} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {budLoading ? (
               [1, 2, 3, 4].map(i => (
@@ -281,7 +283,9 @@ export const Dashboard = () => {
               budgetStatus.filter(b => b.monthlyLimit > 0).slice(0, 5).map(b => (
                 <div key={b.id}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                    <span style={{ fontSize: 13, color: c.text }}>{b.icon} {b.label}</span>
+                    <span style={{ fontSize: 13, color: c.text, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <CategoryIcon id={b.id} size={13} color={b.color} />{b.label}
+                    </span>
                     <span style={{ fontSize: 12, color: c.subtext }}>
                       {formatCurrency(b.spent)} / {formatCurrency(b.monthlyLimit)}
                     </span>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import { Landmark } from 'lucide-react';
 
 /* ─── SVG Icon renderer ──────────────────────────────────────────────────── */
 const SvgIcon = ({ paths, size = 16, strokeWidth = 1.7 }) => (
@@ -161,8 +162,9 @@ export const Sidebar = () => {
           <div style={{
             width: 36, height: 36, borderRadius: 11, background: c.accentGradient,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 19, flexShrink: 0, boxShadow: `0 0 18px rgba(${c.accentRgb},0.45)`,
-          }}>🏦</div>
+            flexShrink: 0, boxShadow: `0 0 18px rgba(${c.accentRgb},0.45)`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}><Landmark size={20} color="#000" strokeWidth={2} /></div>
           <div>
             <div style={{ fontSize: 18, fontWeight: 800, color: c.accent, letterSpacing: '-0.04em', lineHeight: 1.1 }}>Vault</div>
             <div style={{ fontSize: 9.5, color: c.subtext, letterSpacing: '0.14em', textTransform: 'uppercase' }}>Budget Planner</div>

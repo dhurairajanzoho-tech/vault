@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useMobile } from '../hooks/useMobile';
+import { FileText, Banknote, CreditCard, PiggyBank } from 'lucide-react';
+import { CategoryIcon } from '../utils/categoryIcons';
 import notionClient from '../../../shared/utils/notionClient.js';
 import { formatCurrency } from '../../../shared/utils/formatCurrency.js';
 import { getMonthLabel, getMonthKey, getLastSixMonths } from '../../../shared/utils/dateUtils.js';
@@ -107,7 +109,7 @@ const SavingsRing = ({ percent, c }) => {
       </svg>
       <div>
         <div style={{ fontSize: 12.5, fontWeight: 700, color }}>
-          {clamped >= 30 ? '🟢 Excellent' : clamped >= 20 ? '🟡 Good' : clamped >= 10 ? '🟠 Fair' : '🔴 Low'}
+          {clamped >= 30 ? 'Excellent' : clamped >= 20 ? 'Good' : clamped >= 10 ? 'Fair' : 'Low'}
         </div>
         <div style={{ fontSize: 11, color: c.subtext, marginTop: 2 }}>Savings rate</div>
       </div>
@@ -192,7 +194,7 @@ export const Stats = () => {
               borderTopColor: c.accent, borderRadius: '50%',
               display: 'inline-block', animation: 'spin 0.7s linear infinite',
             }} />
-          ) : '📄'} {isMobile ? 'PDF' : 'Export PDF'}
+          ) : <FileText size={14} />} {isMobile ? 'PDF' : 'Export PDF'}
         </button>
       </div>
 
@@ -215,9 +217,9 @@ export const Stats = () => {
           {/* ── Summary Cards + Savings Ring ── */}
           <div className="stats-summary-grid">
             {[
-              { label: 'Total Income', value: stats.totalIncome, color: c.accent, icon: '💵' },
-              { label: 'Total Expenses', value: stats.totalExpenses, color: '#F44336', icon: '💳' },
-              { label: 'Savings', value: stats.savings, color: '#4CAF50', icon: '💰' },
+              { label: 'Total Income', value: stats.totalIncome, color: c.accent, icon: <Banknote size={18} /> },
+              { label: 'Total Expenses', value: stats.totalExpenses, color: '#F44336', icon: <CreditCard size={18} /> },
+              { label: 'Savings', value: stats.savings, color: '#4CAF50', icon: <PiggyBank size={18} /> },
             ].map(item => (
               <div key={item.label} style={{
                 background: c.surfaceElevated, border: `1px solid ${c.cardBorder}`,
@@ -249,12 +251,12 @@ export const Stats = () => {
               borderRadius: 16, padding: '18px 20px', marginBottom: 20,
             }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: c.text, marginBottom: 16 }}>
-                🏆 Top Spending Categories
+                Top Spending Categories
               </div>
               <div className="top3-grid">
                 {stats.top3.map((item, i) => {
                   const cat = DEFAULT_CATEGORIES.find(c => c.id === item.category);
-                  const medals = ['🥇', '🥈', '🥉'];
+                  const ranks = ['1st', '2nd', '3rd'];
                   const pct = stats.totalExpenses > 0 ? ((item.amount / stats.totalExpenses) * 100).toFixed(0) : 0;
                   return (
                     <div key={i} style={{
@@ -263,8 +265,10 @@ export const Stats = () => {
                       border: `1px solid ${cat?.color || c.accent}22`,
                       textAlign: 'center', position: 'relative', overflow: 'hidden',
                     }}>
-                      <div style={{ position: 'absolute', top: 10, right: 10, fontSize: 14 }}>{medals[i]}</div>
-                      <div style={{ fontSize: 30, marginBottom: 8 }}>{cat?.icon || '💳'}</div>
+                      <div style={{ position: 'absolute', top: 10, right: 10, fontSize: 11, fontWeight: 700, color: cat?.color || c.accent }}>{ranks[i]}</div>
+                      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8 }}>
+                        {cat ? <CategoryIcon id={cat.id} size={28} color={cat.color} /> : <CreditCard size={28} color={c.accent} />}
+                      </div>
                       <div style={{ fontSize: 13, fontWeight: 600, color: c.text, marginBottom: 6 }}>
                         {cat?.label || item.category}
                       </div>
@@ -291,7 +295,7 @@ export const Stats = () => {
             borderRadius: 16, padding: '18px 20px', marginBottom: 20,
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: c.text }}>📊 Category Breakdown</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: c.text }}>Category Breakdown</div>
               <div style={{ display: 'flex', gap: 3, background: c.surfaceElevated, borderRadius: 10, padding: 3 }}>
                 <button style={btnTab(chartMode === 'donut')} onClick={() => setChartMode('donut')}>Donut</button>
                 <button style={btnTab(chartMode === 'bar')} onClick={() => setChartMode('bar')}>Bar</button>
@@ -315,7 +319,7 @@ export const Stats = () => {
               background: c.surface, border: `1px solid ${c.cardBorder}`,
               borderRadius: 16, padding: '18px 20px',
             }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: c.text, marginBottom: 16 }}>📈 6-Month Trend</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: c.text, marginBottom: 16 }}>6-Month Trend</div>
               <TrendChart data={trend} />
             </div>
           )}
