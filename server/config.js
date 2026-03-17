@@ -13,9 +13,16 @@ try {
   _localConfig = {};
 }
 
+const isVercel = !!process.env.VERCEL;
+
 const saveLocalConfig = (updates) => {
   _localConfig = { ..._localConfig, ...updates };
-  fs.writeFileSync(CONFIG_PATH, JSON.stringify(_localConfig, null, 2));
+  if (isVercel) return; // read-only filesystem on Vercel — skip file write
+  try {
+    fs.writeFileSync(CONFIG_PATH, JSON.stringify(_localConfig, null, 2));
+  } catch (e) {
+    console.warn('Could not write config file:', e.message);
+  }
 };
 
 const getLocalConfig = () => _localConfig;
